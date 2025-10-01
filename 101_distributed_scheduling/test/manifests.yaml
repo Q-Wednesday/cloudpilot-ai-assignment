@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webhook-demo
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webhook-certs
+  namespace: webhook-demo
+type: Opaque
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURvRENDQW9pZ0F3SUJBZ0lVQk16YXNpMHhwU1I0OUl3SDNKZ3ZFSjBnaXI4d0RRWUpLb1pJaHZjTkFRRUwKQlFBd0tqRW9NQ1lHQTFVRUF3d2ZRV1J0YVhOemFXOXVJRU52Ym5SeWIyeHNaWElnVjJWaWFHOXZheUJEUVRBZQpGdzB5TlRBNU1qZ3dOalUzTlROYUZ3MHpOVEE1TWpZd05qVTNOVE5hTUNjeEpUQWpCZ05WQkFNTUhIZGxZbWh2CmIyc3RjM1pqTG5kbFltaHZiMnN0WkdWdGJ5NXpkbU13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXcKZ2dFS0FvSUJBUURBSVhZczBtWlRzbmM4TUtmK0UvOUIxbHd5MURxUkMyaXFDcTM0cngvSlBrUHhIMjFBdEU4Mgo4TGdZdkFVZUZBa3VSZ2V6a0Uxc1psVUIySDFqWkJ4N2NGTXZ1QnpWOHArU3hhYlViSW1mUUJCc29LVEFrb0J3CkhSV3V0dFBEaVFESzRpY2RBUCs5KzRJaXZjdHd4Y2hHQUc5WkZTTG02SnFFUmo0dTliQ0JVUXd2Ujg4UzdqcmMKV3E0SFh1aUlEWTd6dU5GTUI1VUxrMXhpRXhvK1AycWgxSk45cXN4eE1XNFVrZUlzb1RsVjcxUTdyYzgzQTI5dwpoRlY5QmVkSlREWWovb0JjQmNPQU9INXJERHR4NWdhTzI2UE0vOFdkUE9qSS9mTDhCUHU0Q0oyd2VQOWtuTldqCmZLeFU5WUtKeE5pMDdiTTM1Wk5mUUNXZnRqeDM3WXZCQWdNQkFBR2pnY0F3Z2Iwd0NRWURWUjBUQkFJd0FEQUwKQmdOVkhROEVCQU1DQmVBd0V3WURWUjBsQkF3d0NnWUlLd1lCQlFVSEF3RXdUZ1lEVlIwUkJFY3dSWUlMZDJWaQphRzl2YXkxemRtT0NHSGRsWW1odmIyc3RjM1pqTG5kbFltaHZiMnN0WkdWdGI0SWNkMlZpYUc5dmF5MXpkbU11CmQyVmlhRzl2YXkxa1pXMXZMbk4yWXpBZEJnTlZIUTRFRmdRVTNMWktmYklSUkV5OWVuNEc1ZnoySjBJMW5qc3cKSHdZRFZSMGpCQmd3Rm9BVU9najNkR1dNTlNvSzJLOFU3SzNvR2RoOVZTMHdEUVlKS29aSWh2Y05BUUVMQlFBRApnZ0VCQUIycitJSVg2bDFCWFhHOGVCc2lZUGFtZmJwNUozbmZFZi9rMXJVR3pUVGpKYk9GOXFld0pnQVNaZXIvCnVaL09lTFJBeUQ0MmYzU240eVg4QU4rVEc2RVJyR2c3bURNWVMzdVlkN3VCeFU1SHk5MUtzcTRGTGE1dE1JNmYKKzBIcEkwNjNPQWllNlhYS3N4Z0hoQW5EQTRMTy9wMzlXbjVEdXFQTldzQ3lwQlAwR2EzWkdoNGU4UzFFdXdseQpIejkrVzUxdFIrUEU3Q0p1eWswYU56QTROU1FLMlJaOElCWjBzRUhON2lTRDNKTWJvaTNtOFFBenpMRXRMQ0YyClVibjZVdEl5RTlJUDlmT1hVS2hFOVlDZGloRDliblUyZHZScDlHeVkwM3JSMSszOVhpTVFGS1d0aHlBQXpYV24KOXY3YVFLMUZIRFh0QnVQRzVadXllMmo4cm5vPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktjd2dnU2pBZ0VBQW9JQkFRREFJWFlzMG1aVHNuYzgKTUtmK0UvOUIxbHd5MURxUkMyaXFDcTM0cngvSlBrUHhIMjFBdEU4MjhMZ1l2QVVlRkFrdVJnZXprRTFzWmxVQgoySDFqWkJ4N2NGTXZ1QnpWOHArU3hhYlViSW1mUUJCc29LVEFrb0J3SFJXdXR0UERpUURLNGljZEFQKzkrNElpCnZjdHd4Y2hHQUc5WkZTTG02SnFFUmo0dTliQ0JVUXd2Ujg4UzdqcmNXcTRIWHVpSURZN3p1TkZNQjVVTGsxeGkKRXhvK1AycWgxSk45cXN4eE1XNFVrZUlzb1RsVjcxUTdyYzgzQTI5d2hGVjlCZWRKVERZai9vQmNCY09BT0g1cgpERHR4NWdhTzI2UE0vOFdkUE9qSS9mTDhCUHU0Q0oyd2VQOWtuTldqZkt4VTlZS0p4TmkwN2JNMzVaTmZRQ1dmCnRqeDM3WXZCQWdNQkFBRUNnZ0VBQVgyVTk0K3RqMjFMVldSRmZtQXdkeFhiRnVJY2Z2VHpJN3dUMmRHK2ZmTEIKcDA2TWkvK21IRzJSU1JCVzNCTVExK3IvU3V4bC9GNytIbmE3OE13bFdDd1F1aVpjRTJrWHBiVnF1QnZNTk1nRQpCSnE1c255RWVuSXdVWS9kckZiOUVvWGZBcStuL0VUbDcxL3djc3hYQTV1RDRhR2JTT1l4c2pCakViMVNXR3Q1Cmlwck1HM1lYSHhidnZVU2FxSTJyVTRxL3VDMzdrdnpsazJ1blkxdWIreHVJZWRmaSt3WkV1VitjU2ROenhsc0MKWmpCY0xPTlEvQ1Bva3ViaFFFd0hxN1NNL3RodHRCL1J3dnBzOEM3ckZBR0tHU1E0OVA5LzNjbExRQlJGd051UAp0aUlHZ2IrT29hNUszbm0xbzNiMlFyd0lxSVgrdzdnR2U1bDZybnBtMFFLQmdRRG1Qd2dXUENxR0kvVmlweE1yCkVueGhKVk9aODNxL1BpMmE3VmpVUGtzYTV1cUptcHhjOFQzY1ZEeTVFcVNNY0h4VDNRZDlXYzlKOVJmTkx1WGEKSUJkUzhhSklCNlVBcTFkQ2pacnRUMmJyME9mS1gra1kyN0d1U0FFMDlpSExKQURlL2hvbTU1RFBTTFRSd3laTgpVYzdDU0t6aDk5aU5rWm0ySGNNaDlyQUZFUUtCZ1FEVm53T3F2SXUyWkZncDRuZWxGZno5UE5oUzZzOThDVVFkClg5ZXEyaGsyR1lDN24zZWhiRUNiSnVrTHplNW1rTWZPMVFnQlBkbGNDaWhya3prT0hFSFdaWExlK29Kb2ZUSWEKZy9IdDhUbTFxNXdmMDFPODZoa0ljei9Bc3VSd1BNUUZOeHo1UkdidnErb1pMdzA5SDc0VjBnaHFnYlpXaWhEegpiUEtOaTUxYnNRS0JnQ0hlRTZweG55K3NDbVJBZnlsT3hzempXTERFaDhHcHU3dVdQZ0s2UndIbUJZbklIRWZ2CmxGSGNjakltODkxVWpuVW5oZnFDUTJOMWtkSzBtMHJDZmF2TnJ6azVKcVE2ajlOU1VQK25ObFJwbmk2K2ZPTVQKTGNlYy85QnlnL1lGamJzL1ZVbHp0bkZIR0pIaVNyZ0UySXpyYzhLcFdrazRxWXVJUlRPeHZhS0JBb0dBZG9WQQpHcFY3aXBtSDFNMUNob1I1bGVNUlBvZnEwQzJ2N2dCRC94WDhrT2g3WlIybjJSYmZqWFY4TFVGM09NNnhIUTlTCjNxVjdHRGJHa0ZEaGdmT3BqNU0vdFhrVnEzVnl2QVZpMEJwYlkzRXdNUFFsN0pXUmgvK3hhbStXa0xNV0tyS1cKVDdKa3ppcjZ1amhCeHh6NmNNN1VQb3R6Si9aNFN5YXlPRmd5MlRFQ2dZRUEwOCtkazZ4ZnNOM0xUQmo1K3R3MApVKzI3TUJ4TmUybGxSTzgydXVSVEpUaFhyN0l0NFBrTmVERXY0U2hTTzc5VUJlclEyODVZa1p3b1VhR2NBRUFUCndRSVlvdmNTTU5Yay95YXdrZ0R6UXJ0dzFRWURRS0dDcEV4OUhRc05yc2g4UUwrZ0FmSWVCdGRrVXRIa2JOWWoKekF5Ni85S0FIc2NUcm9oNWlnWU9TbEE9Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: webhook-sa
+  namespace: webhook-demo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: webhook-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: webhook-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: webhook-role
+subjects:
+- kind: ServiceAccount
+  name: webhook-sa
+  namespace: webhook-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook
+  namespace: webhook-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook
+  template:
+    metadata:
+      labels:
+        app: webhook
+    spec:
+      serviceAccountName: webhook-sa
+      containers:
+      - name: webhook
+        image: localhost:5001/distributed-scheduling:latest
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - name: tls
+          mountPath: /tls
+          readOnly: true
+        imagePullPolicy: Always
+      volumes:
+      - name: tls
+        secret:
+          secretName: webhook-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-svc
+  namespace: webhook-demo
+spec:
+  ports:
+  - port: 443
+    targetPort: 8443
+  selector:
+    app: webhook
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-label-webhook
+webhooks:
+- name: podlabel.webhook.demo
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
+  clientConfig:
+    service:
+      name: webhook-svc
+      namespace: webhook-demo
+      path: "/mutate"
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUROVENDQWgyZ0F3SUJBZ0lVQnoyYzUwenFJT0tldHY4MHkzSkNVeHRIcDVvd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0tqRW9NQ1lHQTFVRUF3d2ZRV1J0YVhOemFXOXVJRU52Ym5SeWIyeHNaWElnVjJWaWFHOXZheUJEUVRBZQpGdzB5TlRBNU1qZ3dOalUzTlROYUZ3MHpOVEE1TWpZd05qVTNOVE5hTUNveEtEQW1CZ05WQkFNTUgwRmtiV2x6CmMybHZiaUJEYjI1MGNtOXNiR1Z5SUZkbFltaHZiMnNnUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUIKRHdBd2dnRUtBb0lCQVFEUU01MmxYZU9McG90a2VHL29mWjE1WHNMR3dRcEUybk9lcm1EblRURjNjVFpDMVVjQQpmZTRKQ0tHMEhENmNQMHMvQnVjWks3cDVzbnYvNXk2SUFMYUJXK3pONGxpUnFQZk93S0JQYjBVV3lvNS8wTk92CnRScm5mNUdWeElBUC9xK25xMG0zaHRYdTIyYjB2TDRrMnFQa2ZiUUYvM3JvS3lPQVA2RVprdVNPTjRmT2piVUQKRlljTUtyVWpwekpZVW11L3FhdlA0UW1TZzFOcDRqU0N2R05IRkVyOFYwcGRiWWxqYzlrMnpxWmtjcWJ5MjhJWQpuM3F4ZVE0V1VWYzkwdVN1cUZHaVJBd1pEcUE2b05JeDFQMGg2cVMzZENLWGZnd2lrd0dQcEN2RjBZeUZsazE2CjdLQXE1dERjemdDSGlEUEpOWDVHNndxQnAwWm16U3RxZEpkOUFnTUJBQUdqVXpCUk1CMEdBMVVkRGdRV0JCUTYKQ1BkMFpZdzFLZ3JZcnhUc3JlZ1oySDFWTFRBZkJnTlZIU01FR0RBV2dCUTZDUGQwWll3MUtncllyeFRzcmVnWgoySDFWTFRBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFDT00vYUt1MGg4CjBZakVxeUdJSWhha3YrbVlGUU83ZTFjOW1vSHBoWmZmZ0Z5K3VtYUFDRzdtN01TWWxQUXlTK0hHY3UxWUV4dEkKdGpxUHJRNVhiM1dSRkNIUDc0RmIxT3ZLSk1STCtleVlVU1V1VmFSczB4RWVEd0U5U0MzY3F1ODA3R2lnNllBMQpmQk9lTm03QlRwNDIyQklxdnZ3RTdsdnkrbjVZQm1UcXBDZUdSUUlMV0ZVeGhvdlRjWUdOOXJlS1lRZWNjamJjCkFOTUtHUFFLQVRSYzdtT1N2RnFEdUFBVnpaRWsxL20wcXBtOFUydTZhejB4T0RJenF6NmpRZFFydHI0dUlRUTYKRG5USnN1THBwd28wRDUwUXBlZDh6L3ZqSlNFL3NiMWFKSEdCSEl1MTFFOW04TWhQeUEwMjUrMG5kYU15a0RrUQpMbjErZzU1ZHlyQzIKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+  rules:
+  - operations: ["CREATE"]
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["pods"]

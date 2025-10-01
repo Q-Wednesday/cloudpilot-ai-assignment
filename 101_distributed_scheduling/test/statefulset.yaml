@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-statefulset
+  namespace: default
+  annotations:
+    distributed-scheduling/min-available: "2"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-statefulset
+  template:
+    metadata:
+      labels:
+        app: test-statefulset
+    spec:
+      containers:
+      - name: pause
+        image: k8s.gcr.io/pause:3.9
